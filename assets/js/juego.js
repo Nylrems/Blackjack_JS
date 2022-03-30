@@ -11,7 +11,9 @@ let puntosJugador = 0,
 
 //?Referencias del HTML
 const btnPedir = document.querySelector("#btnPedir");
+const btnDetener = document.querySelector("#btnDetener");
 const divCartasJugador = document.querySelector("#jugador-cartas");
+const divCartasComputadora = document.querySelector("#computadora-cartas");
 const smallsPuntos = document.querySelectorAll("small");
 
 //*Esta función crear una nueva baraja
@@ -73,13 +75,30 @@ const valorCarta = (carta) => {
   return puntos;
 };
 
+//*Turno de la computadora
+const turnoComputadora = (puntosMinimos) => {
+  do {
+    const carta = pedirCarta();
+    puntosComputadora = puntosComputadora + valorCarta(carta);
+    smallsPuntos[1].innerText = puntosComputadora;
+
+    const imgCarta = document.createElement("img");
+    imgCarta.src = `assets/cartas/${carta}.png`;
+    imgCarta.classList.add("carta");
+    divCartasComputadora.append(imgCarta);
+
+    if (puntosMinimos === 21) {
+      break;
+    }
+  } while (puntosComputadora < puntosMinimos && puntosMinimos <= 21);
+};
+
 // let valor = valorCarta(pedirCarta());
 // console.log({ valor });
 
 //?Eventos
 btnPedir.addEventListener("click", () => {
   const carta = pedirCarta();
-  console.log(carta);
 
   puntosJugador = puntosJugador + valorCarta(carta);
   smallsPuntos[0].innerText = puntosJugador;
@@ -92,8 +111,17 @@ btnPedir.addEventListener("click", () => {
   if (puntosJugador > 21) {
     console.warn("Perdiste");
     btnPedir.disabled = true;
+    btnDetener.disabled = true;
+    turnoComputadora(puntosJugador);
   } else if (puntosJugador === 21) {
     console.warn("21 blackjack!!!");
     btnPedir.disabled = true;
+    turnoComputadora(puntosJugador);
   }
+});
+
+btnDetener.addEventListener("click", () => {
+  btnPedir.disabled = true;
+  btnDetener.disabled = true;
+  turnoComputadora(puntosJugador);
 });
