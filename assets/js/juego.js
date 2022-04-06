@@ -21,12 +21,24 @@
   const divCartasJugadores = document.querySelectorAll(".divCartas"),
     smallsPuntos = document.querySelectorAll("small");
 
+    btnPedir.disabled = true;
+    btnDetener.disabled = true;
   //*Esta función inicializa el juego
   const inicializarJuego = (numJugadores = 2) => {
     deck = crearDeck();
+
+    puntosJugadores = [];
     for (let i = 0; i < numJugadores; i++) {
       puntosJugadores.push(0);
     }
+
+    smallsPuntos.forEach(elem => elem.innerText = 0) 
+    divCartasJugadores.forEach(elem => elem.innerHTML = '');
+    // smallsPuntos[0].innerText = 0;
+    // smallsPuntos[1].innerText = 0;
+
+    btnPedir.disabled = false;
+    btnDetener.disabled = false;
   };
 
   //*Esta función crear una nueva baraja
@@ -98,6 +110,25 @@
     // divCartasComputadora.append(imgCarta);
   };
 
+  const determinarGanador = () => {
+
+    const [puntosMinimos, puntosComputadora] = puntosJugadores;
+
+    setTimeout(() => {
+      if (puntosComputadora === puntosMinimos) {
+        alert("Empatados");
+      } else if (puntosComputadora > 21) {
+        alert("Has ganado");
+      } else if (puntosMinimos > 21) {
+        alert("Has perdido");
+      } else {
+        alert("La computadora gana");
+      }
+    }, 10);
+
+
+  };
+
   //*Turno de la computadora
   const turnoComputadora = (puntosMinimos) => {
     let puntosComputadora = 0;
@@ -118,17 +149,8 @@
         break;
       }
     } while (puntosComputadora < puntosMinimos && puntosMinimos <= 21);
-    setTimeout(() => {
-      if (puntosComputadora === puntosMinimos) {
-        alert("Empatados");
-      } else if (puntosComputadora > 21) {
-        alert("Has ganado");
-      } else if (puntosMinimos > 21) {
-        alert("Has perdido");
-      }else{
-        alert('La computadora gana')
-      }
-    }, 10);
+
+    determinarGanador();
   };
 
   // let valor = valorCarta(pedirCarta());
@@ -169,19 +191,7 @@
   });
 
   btnNuevo.addEventListener("click", () => {
-    console.clear();
+    // console.clear();
     inicializarJuego();
-    // deck = [];
-    // deck = crearDeck();
-    // //
-
-    // smallsPuntos[0].innerText = 0;
-    // smallsPuntos[1].innerText = 0;
-
-    // divCartasJugador.innerHTML = "";
-    // divCartasComputadora.innerHTML = "";
-
-    // btnPedir.disabled = false;
-    // btnDetener.disabled = false;
   });
 })();
